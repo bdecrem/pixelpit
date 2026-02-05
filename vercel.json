@@ -1,1 +1,7 @@
-{"framework":"nextjs"}
+{
+  "framework": "nextjs",
+  "rewrites": [
+    { "source": "/pp/:game", "destination": "/pixelpit/arcade/:game" },
+    { "source": "/:path*", "destination": "/pixelpit/:path*" }
+  ]
+}
