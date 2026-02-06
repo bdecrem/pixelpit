@@ -4,7 +4,7 @@ const nextConfig = {
     unoptimized: true,
   },
   // Transpile three.js and react-three packages to fix bundling issues
-  transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],
+  transpilePackages: ['three', '@react-three/fiber'],
   // Webpack config for three.js
   webpack: (config, { isServer }) => {
     if (!isServer) {
