@@ -3,6 +3,18 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Transpile three.js and react-three packages to fix bundling issues
+  transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],
+  // Webpack config for three.js
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'three': require.resolve('three'),
+      };
+    }
+    return config;
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
