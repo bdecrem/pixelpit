@@ -1,1 +1,1 @@
-{"framework":"nextjs"}
+{"framework":"nextjs","rewrites":[{"source":"/pp/:path*","destination":"/pixelpit/arcade/:path*"}]}
