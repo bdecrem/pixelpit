@@ -1,1 +1,10 @@
-{"framework":"nextjs","rewrites":[{"source":"/pp/:path*","destination":"/pixelpit/arcade/:path*"}]}
+{
+  "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "rewrites": [
+    {
+      "source": "/pp/:path*",
+      "destination": "/pixelpit/arcade/:path*"
+    }
+  ]
+}
