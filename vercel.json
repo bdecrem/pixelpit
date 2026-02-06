@@ -1,6 +1,7 @@
 {
   "framework": "nextjs",
   "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "cp next.config.cjs next.config.js 2>/dev/null; next build",
   "rewrites": [
     {
       "source": "/pp/:path*",
