@@ -2,7 +2,20 @@
   "framework": "nextjs",
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "cp next.config.cjs next.config.js 2>/dev/null; next build",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.daskollektiv.rip" }],
+      "destination": "https://daskollektiv.rip/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "daskollektiv.rip" }],
+      "destination": "/pixelpit/daskollektiv/index.html"
+    },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "daskollektiv.rip" }],
