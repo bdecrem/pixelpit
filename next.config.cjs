@@ -3,9 +3,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Transpile three.js and react-three packages to fix bundling issues
   transpilePackages: ['three', '@react-three/fiber'],
-  // Webpack config for three.js
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.alias = {
@@ -23,12 +21,26 @@ const nextConfig = {
   },
   trailingSlash: true,
   async rewrites() {
-    return [
-      {
-        source: '/pp/:path*',
-        destination: '/pixelpit/arcade/:path*',
-      },
-    ]
+    return {
+      beforeFiles: [
+        {
+          source: '/',
+          has: [{ type: 'host', value: 'daskollektiv.rip' }],
+          destination: '/pixelpit/daskollektiv/index.html',
+        },
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: 'daskollektiv.rip' }],
+          destination: '/pixelpit/daskollektiv/:path*',
+        },
+      ],
+      afterFiles: [
+        {
+          source: '/pp/:path*',
+          destination: '/pixelpit/arcade/:path*',
+        },
+      ],
+    }
   },
 }
 
