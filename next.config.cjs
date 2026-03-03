@@ -33,6 +33,16 @@ const nextConfig = {
           has: [{ type: 'host', value: 'daskollektiv.rip' }],
           destination: '/pixelpit/daskollektiv/:path*',
         },
+        {
+          source: '/',
+          has: [{ type: 'host', value: 'www.daskollektiv.rip' }],
+          destination: '/pixelpit/daskollektiv/index.html',
+        },
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: 'www.daskollektiv.rip' }],
+          destination: '/pixelpit/daskollektiv/:path*',
+        },
       ],
       afterFiles: [
         {
