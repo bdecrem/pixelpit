@@ -4,6 +4,11 @@
   "buildCommand": "cp next.config.cjs next.config.js 2>/dev/null; next build",
   "rewrites": [
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "daskollektiv.rip" }],
+      "destination": "/pixelpit/daskollektiv/:path*"
+    },
+    {
       "source": "/pp/:path*",
       "destination": "/pixelpit/arcade/:path*"
     }
