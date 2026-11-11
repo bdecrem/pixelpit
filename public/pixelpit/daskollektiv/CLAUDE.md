@@ -41,6 +41,8 @@ Add the new track **at the top** of the array in `tracks.json`:
 }
 ```
 
+**Video releases** (a `dkNNN.mp4` page, like DK020–022, DK026–027) also get `"video": "dk{NNN}.mp4"` and `"poster": "dk{NNN}-poster.jpg"`. The homepage plays the newest entry with a `video` large on its first screen (muted preview, "play with sound"), so a new video without these fields will not show up there.
+
 Without this step, the track will not appear on the homepage or archive. The homepage (`index.html`) and archive (`archive.html`) both read from `tracks.json` to render their track lists.
 
 ### 3. Add an OG image

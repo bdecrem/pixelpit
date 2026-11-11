@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
   <title>DAS KOLLEKTIV</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬛</text></svg>">
   <meta name="description" content="hallman x marg">
@@ -29,19 +30,29 @@
       z-index: 0;
     }
 
+    /* The first screen: the name, the newest video as large as the screen allows, and the
+       way to every track. --chrome is the height of everything but the video (padding 2×24,
+       name ~72, two gaps 2×22, caption ~52 = 216, plus room), so on a desktop the video is
+       (100dvh − 230) tall and 16:9; on a short landscape screen it keeps at least 60vw. */
     .hero {
+      --g: 24px;
+      --chrome: 230px;
       position: relative;
       z-index: 1;
-      height: 100vh;
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 24px;
+      gap: 22px;
+      padding: calc(24px + env(safe-area-inset-top)) calc(var(--g) + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(var(--g) + env(safe-area-inset-left));
     }
 
+    .masthead { text-align: center; }
+
     .title {
-      font-size: clamp(36px, 10vw, 80px);
+      font-size: clamp(24px, 4vw, 44px);
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -51,12 +62,118 @@
     }
 
     .x {
-      font-size: clamp(11px, 2vw, 14px);
+      font-size: clamp(10px, 1.4vw, 12px);
       font-weight: 400;
       letter-spacing: 0.5em;
-      color: #333;
-      margin-top: 20px;
+      color: #444;
+      margin-top: 14px;
       text-transform: lowercase;
+    }
+
+    .feature {
+      width: min(100%, max(calc((100dvh - var(--chrome)) * 16 / 9), 60vw));
+      margin: 0;
+    }
+
+    .frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .frame video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #000;
+      cursor: pointer;
+    }
+
+    .sound {
+      position: absolute;
+      left: 16px; bottom: 16px;
+      font: 400 11px 'Space Mono', monospace;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 10px 14px;
+      cursor: pointer;
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .sound:hover { background: #fff; color: #000; }
+    .sound[hidden] { display: none; }
+
+    .caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .v-title {
+      font-size: clamp(16px, 2vw, 22px);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .v-title:hover { color: #888; }
+
+    .v-meta {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: #555;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    /* The way to every track: a real button, white on black, never a whisper. */
+    .all-tracks {
+      flex: none;
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      padding: 14px 20px 14px 22px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .all-tracks:hover { background: #fff; color: #000; }
+
+    /* Phones: the video runs edge to edge, the caption stacks and the button spans the width. */
+    @media (max-width: 640px) {
+      .hero { --g: 0px; gap: 20px; }
+      .feature { width: 100%; }
+      .caption { flex-direction: column; align-items: stretch; padding: 0 16px; }
+      .all-tracks { text-align: center; padding: 16px 12px; }
+      .sound { left: 10px; bottom: 10px; font-size: 10px; padding: 7px 10px; }
+    }
+
+    /* A phone on its side: the name small, the caption beside the video, so the whole video
+       fits the screen (12 + 18 name + 10 gap + 12 = 52 around it, 64 with room; 236 leaves the
+       caption room for the button). */
+    @media (orientation: landscape) and (max-height: 540px) {
+      .hero { --g: 24px; gap: 10px; padding-top: calc(12px + env(safe-area-inset-top)); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+      .title { font-size: 18px; }
+      .x { display: none; }
+      .feature { width: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 16px; }
+      .frame { flex: none; width: min(calc((100dvh - 64px) * 16 / 9), calc(100% - 236px)); }
+      .caption { flex-direction: column; align-items: flex-start; margin-top: 0; padding: 0; gap: 14px; }
     }
 
     .bottom {
@@ -133,20 +250,7 @@
       line-height: 1.6;
     }
 
-    .archive-link {
-      display: inline-block;
-      margin-top: 60px;
-      font-size: 9px;
-      letter-spacing: 0.4em;
-      color: #222;
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: color 0.4s;
-    }
-
-    .archive-link:hover {
-      color: #fff;
-    }
+    .archive-link { margin-top: 48px; }
 
     .footer {
       padding: 80px 24px 32px;
@@ -171,15 +275,27 @@
   <canvas id="c"></canvas>
 
   <div class="hero">
-    <div class="title">Das Kollektiv</div>
-    <div class="x">hallman &times; marg</div>
+    <div class="masthead">
+      <div class="title">Das Kollektiv</div>
+      <div class="x">hallman &times; marg</div>
+    </div>
+    <figure class="feature">
+      <div class="frame" id="frame" hidden>
+        <video id="v" muted loop playsinline preload="metadata"></video>
+        <button class="sound" id="sound" type="button">&#9654; play with sound</button>
+      </div>
+      <figcaption class="caption">
+        <div id="v-cap"></div>
+        <a href="archive.html" class="all-tracks" id="all-tracks">all tracks &rarr;</a>
+      </figcaption>
+    </figure>
   </div>
 
   <div class="content">
     <div class="latest">
       <div class="latest-label">latest</div>
       <div id="latest-track"></div>
-      <a href="archive.html" class="archive-link" id="archive-link" style="display:none">all releases &rarr;</a>
+      <a href="archive.html" class="all-tracks archive-link" id="archive-link">all tracks &rarr;</a>
     </div>
     <div class="footer">
       <span>2026</span>
@@ -296,10 +412,52 @@
           `<div class="track-artists">${latest.artists}</div>` +
           `<div class="track-desc">${latest.description}</div>`;
 
-        if (tracks.length > 1) {
-          document.getElementById('archive-link').style.display = '';
-        }
+        const all = `all ${tracks.length} tracks &rarr;`;
+        document.getElementById('all-tracks').innerHTML = all;
+        document.getElementById('archive-link').innerHTML = all;
+
+        // The newest release with a video (tracks.json "video"), up top.
+        const t = tracks.find(t => t.video);
+        if (t) showVideo(t);
       });
+
+    // Plays muted on a loop as a preview (unless the reader asked for less motion or less
+    // data); "play with sound", or a tap on the picture, starts it from the top with sound
+    // and the browser's own controls. The preview pauses while it is off screen.
+    function showVideo(t) {
+      const frame = document.getElementById('frame');
+      const v = document.getElementById('v');
+      const sound = document.getElementById('sound');
+      document.getElementById('v-cap').innerHTML =
+        `<a href="${t.url}" class="v-title">${t.title}</a>` +
+        `<div class="v-meta">latest video &middot; ${t.id} &middot; ${t.artists}</div>`;
+      if (t.poster) v.poster = t.poster;
+      v.src = t.video;
+      frame.hidden = false;
+
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        (navigator.connection && navigator.connection.saveData);
+      let preview = !still;
+      const playPreview = () => { if (preview) v.play().catch(() => {}); };
+      playPreview();
+
+      const listen = () => {
+        preview = false;
+        sound.hidden = true;
+        v.loop = false;
+        v.muted = false;
+        v.controls = true;
+        v.currentTime = 0;
+        v.play().catch(() => {});
+      };
+      sound.addEventListener('click', listen);
+      v.addEventListener('click', () => { if (!v.controls) listen(); });
+
+      new IntersectionObserver(([e]) => {
+        if (!preview) return;
+        if (e.intersectionRatio > 0.25) playPreview(); else v.pause();
+      }, { threshold: [0, 0.25, 0.5] }).observe(frame);
+    }
 
     // Hide fixed bottom bar once user scrolls past hero
     const bottomBar = document.querySelector('.bottom');
