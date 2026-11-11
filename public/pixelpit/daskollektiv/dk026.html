@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Kollektiv — Nordlicht</title>
+<meta name="description" content="Nordlicht (northern lights). A projection over a crowd: mirrored film in green, blue, violet and rose, the sea breaking, a moon that comes and goes, and back to blue at the end. 4:40.">
+<meta property="og:title" content="Das Kollektiv — Nordlicht">
+<meta property="og:description" content="Nordlicht (northern lights). A projection over a crowd: mirrored film in green, blue, violet and rose, the sea breaking, a moon that comes and goes, and back to blue at the end. 4:40.">
+<meta property="og:image" content="https://daskollektiv.rip/dk026-og.png">
+<meta property="og:url" content="https://daskollektiv.rip/dk026.html">
+<meta property="og:type" content="video.other">
+<meta property="og:video" content="https://daskollektiv.rip/dk026.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="1280">
+<meta property="og:video:height" content="720">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Das Kollektiv — Nordlicht">
+<meta name="twitter:description" content="Nordlicht (northern lights). A projection over a crowd: mirrored film in green, blue, violet and rose, the sea, a moon.">
+<meta name="twitter:image" content="https://daskollektiv.rip/dk026-og.png">
+<meta name="theme-color" content="#050505">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: #050505; overflow: hidden;
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    cursor: crosshair;
+  }
+  /* The projection itself: 16:9, letterboxed in the dark; the poster shows dimly before
+     the first play (iOS fires no loadeddata with preload=metadata, so it is not waited for). */
+  video {
+    position: fixed; inset: 0; width: 100vw; height: 100dvh;
+    object-fit: contain; background: #050505;
+    opacity: 0.35; transition: opacity 2.4s ease;
+  }
+  video.on { opacity: 1; }
+  #overlay {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  #play-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.3);
+    font-size: 18px; cursor: pointer; pointer-events: auto;
+    transition: all 0.4s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #play-btn:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+  #play-btn.playing { opacity: 0; pointer-events: none; }
+  #credits {
+    position: fixed; bottom: 18px; left: 0; right: 0; text-align: center;
+    font-size: 8px; letter-spacing: 4px; color: rgba(255,255,255,0.06); z-index: 10;
+    pointer-events: none;
+  }
+  #title {
+    position: fixed; top: 14px; left: 18px;
+    font-size: 7px; letter-spacing: 3px; color: rgba(255,255,255,0.05); z-index: 10;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<video id="v" src="dk026.mp4" poster="dk026-poster.jpg" playsinline preload="metadata"></video>
+<div id="title">DAS KOLLEKTIV #026</div>
+<div id="overlay"><button id="play-btn" aria-label="Play">▶</button></div>
+<div id="credits">DAS KOLLEKTIV · NORDLICHT · 4:40</div>
+<script>
+  // Tap anywhere to play or pause; the projection fades in from the dark and
+  // back out at the end (no hard cuts).
+  const v = document.getElementById('v');
+  const btn = document.getElementById('play-btn');
+  const toggle = () => {
+    if (v.paused) { v.play(); } else { v.pause(); }
+  };
+  btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+  document.body.addEventListener('click', toggle);
+  addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); toggle(); } });
+  v.addEventListener('play', () => { btn.classList.add('playing'); v.classList.add('on'); });
+  v.addEventListener('pause', () => { btn.classList.remove('playing'); btn.textContent = '▶'; });
+  v.addEventListener('ended', () => { v.classList.remove('on'); btn.classList.remove('playing'); btn.textContent = '↻'; v.currentTime = 0; });
+</script>
+</body>
+</html>
